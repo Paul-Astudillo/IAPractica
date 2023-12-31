@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Estilos para el encabezado del hospital */
+        .hospital-header {
+            background-color: white; 
+            color: #ffffff;
+            text-align: right; /* Alineamos el texto a la derecha */
+            padding: 20px;
+        }
+
+        /* Estilos para la apariencia del texto en el encabezado del hospital */
+        .hospital-header .hospital-title {
+            font-family: 'Arial', sans-serif;
+            font-size: 36px;
+            font-weight: bold;
+        }
+
+        /* Estilos para la posición y tamaño del logo en el encabezado del hospital */
+        .hospital-header .logo {
+            width: 88px;
+            height: auto;
+            float: right;
+            margin-top: -70px;
+            margin-right: -170px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header del Hospital -->
+<header class="hospital-header bg-primary text-white text-center py-3">
+    <div class="container">
+        <h1 class="hospital-title">Clínica Vitalis</h1>
+ <img src="https://us.123rf.com/450wm/fayethequeen/fayethequeen2205/fayethequeen220500009/185502332-edificio-del-hospital-aislado-sobre-fondo-blanco-edificio-hospitalario-salud-y-concepto-m%C3%A9dico.jpg?ver=6" class="logo">
+    </div>
+</header>
+
+<div class="container mt-5" >
+    <h2 class="mb-4">Formulario</h2>
+    <form id="myForm" method="post" action="{% url 'resultado' %}">
+        {% csrf_token %}
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="age">Edad</label>
+                <input type="number" class="form-control" id="edad" name="edad" required>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="sex">Sexo</label>
+                <select class="form-control" id="sex" name="sexo" required>
+                    <option value="0">Masculino</option>
+                    <option value="1">Femenino</option>
+                </select>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="bmi">Índice de Masa Corporal</label>
+                <input type="number" class="form-control" id="indice_masa_corporal" name="indice_masa_corporal" step=".01" required>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="bloodPressure">Presión Arterial</label>
+                <input type="number" class="form-control" id="precion_arterial" name="precion_arterial" required>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="serum1">Suero 1</label>
+                <input type="number" class="form-control" id="suero_1" name="suero_1" step=".01" required>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="serum2">Suero 2</label>
+                <input type="number" class="form-control" id="suero_2" name="suero_2" step=".01" required>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="serum3">Suero 3</label>
+                <input type="number" class="form-control" id="suero_3" name="suero_3" step=".01" required>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="serum4">Suero 4</label>
+                <input type="number" class="form-control" id="suero_4" name="suero_4" step=".01" required>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="serum5">Suero 5</label>
+                <input type="number" class="form-control" id="suero_5" name="suero_5" step=".01" required>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="serum6">Suero 6</label>
+                <input type="number" class="form-control" id="suero_6" name="suero_6" step=".01" required>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="diseaseProgression">Progresión de Enfermedad</label>
+                <input type="number" class="form-control" id="progresion_enfermeda" name="progresion_enfermeda" required>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Enviar</button>
+    </form>
+</div>
+<hr>
+
+<footer class="footer">
+    <div class="container">
+        <p>Contacto: <a href="mailto:contacto@hospitalsanpaul.com">PaulAstudillo@hospitalVitalis.com</a></p>
+        <p>Contacto: <a href="mailto:contacto@hospitalsanpaul.com">AndresAlvarado@hospitalsanpVitalis.com</a></p>
+        <p class="copyright" id="current-date"></p>
+    </div>
+</footer>
+
+<script>
+    // Obtener la fecha actual
+    var currentDate = new Date();
+    var year = currentDate.getFullYear();
+    var month = currentDate.toLocaleString('default', { month: 'long' });
+    var day = currentDate.getDate();
+
+    // Actualizar el contenido del elemento con id "current-date"
+    document.getElementById("current-date").innerHTML = "&copy; " + year + " Hospital San Paul. Todos los derechos reservados. | " + day + " de " + month + " de " + year;
+
+    function validateForm() {
+    var form = document.getElementById('myForm');
+    if (form.checkValidity()) {
+        // Enviar formulario si es válido
+        alert('Formulario válido. Enviar datos...');
+        // Aquí puedes agregar la lógica para enviar los datos al servidor
+    } else {
+        // Mostrar mensajes de validación
+        alert('Por favor, complete todos los campos correctamente.');
+    }
+}
+
+// Agregar más funciones de validación según sea necesario
+document.getElementById('age').addEventListener('input', function() {
+    validateAge(this);
+});
+
+function validateAge(input) {
+    if (input.value < 0 || input.value > 120) {
+        input.setCustomValidity('La edad debe estar entre 0 y 120 años.');
+    } else {
+        input.setCustomValidity('');
+    }
+}
+
+</script>
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="script.js"></script>
+
+</body>
+</html>
