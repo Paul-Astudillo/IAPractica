@@ -45,4 +45,5 @@ urlpatterns = [
     path('', include('home.urls')),
     re_path(r'^nuevasolicitud/$',views.Clasificacion.determinarAprobacion, name='nuevasolicitud'),
     re_path(r'^resultado/$',views.Clasificacion.predecir, name='resultado'),
+    re_path(r'^resultadoNB/$',views.Clasificacion.predecirNB, name='resultadoNB'),
 ]

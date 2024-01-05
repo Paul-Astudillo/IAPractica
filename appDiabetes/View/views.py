@@ -5,6 +5,7 @@ from django.shortcuts import render
 from appDiabetes.Logica.modeloSNN import modeloSNN #para utilizar el método inteligente
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view
+from appDiabetes.Logica import modeloSNN
 import json
 from django.http import JsonResponse
 
@@ -26,6 +27,7 @@ class Clasificacion():
 
             precion_arterial = int(''+request.POST.get('precion_arterial'))
             print(precion_arterial)
+
             sexo=request.POST.get('sexo')
             print(sexo)
 
@@ -37,38 +39,106 @@ class Clasificacion():
      
             suero_3= int(''+request.POST.get('suero_3'))
             print(suero_3)
+
             suero_4= int(''+request.POST.get('suero_4'))
             print(suero_4)
+
             suero_5= int(''+request.POST.get('suero_5'))
             print(suero_5)
+
             suero_6= int(''+request.POST.get('suero_6'))
             print(suero_6)
+
             progresion_enfermeda= int(''+request.POST.get('progresion_enfermeda'))
             print(progresion_enfermeda)
 
+            modelo=request.POST.get('modelo')
+            print("Modelo seleccionado",modelo)
+
             #Consumo de la lógica para predecir si se aprueba o no el crédito
             print("leido todos los datos")
-            modelo = modeloSNN()
             print("Creo la clase modeloSNN")
-            resul=modelo.predecirNuevoCliente(edad=edad, sexo=sexo, indice_masa_corporal=indice_masa_corporal, precion_arterial=precion_arterial,
-    suero_1=suero_1, suero_2=suero_2, suero_3=suero_3, 
-    suero_4=suero_4, suero_5=suero_5, suero_6=suero_6, 
-    progresion_enfermeda=progresion_enfermeda)
-        except:
+
+            #RedNeuronal
+            resul=modeloSNN.modeloSNN.predecirNuevoCliente(modeloSNN.modeloSNN, edad=edad, sexo=sexo, indice_masa_corporal=indice_masa_corporal, precion_arterial=precion_arterial,
+            suero_1=suero_1, suero_2=suero_2, suero_3=suero_3, 
+            suero_4=suero_4, suero_5=suero_5, suero_6=suero_6, 
+            progresion_enfermedad=progresion_enfermeda)
+
+            #NBayes
+        except Exception as e:
+            print(e)
             resul='Datos inválidos'
+           
         return render(request, "resultado.html",{"e":resul})
     
 
-
-############
-
-
-
-
-
-    @csrf_exempt
+        
     @api_view(['GET','POST'])
-    def predecirIOJson(request):
+    def predecirNB(request):
+        try:
+            #Formato de datos de entrada
+            print("Entro al request")
+            edad = int(''+request.POST.get('edad'))
+            print(edad)
+
+            indice_masa_corporal = int(''+request.POST.get('indice_masa_corporal'))
+            print(indice_masa_corporal)
+
+            precion_arterial = int(''+request.POST.get('precion_arterial'))
+            print(precion_arterial)
+
+            sexo=request.POST.get('sexo')
+            print(sexo)
+
+            suero_1= int(''+request.POST.get('suero_1'))
+            print(suero_1)
+
+            suero_2= int(''+request.POST.get('suero_2'))
+            print(suero_2)
+     
+            suero_3= int(''+request.POST.get('suero_3'))
+            print(suero_3)
+
+            suero_4= int(''+request.POST.get('suero_4'))
+            print(suero_4)
+
+            suero_5= int(''+request.POST.get('suero_5'))
+            print(suero_5)
+
+            suero_6= int(''+request.POST.get('suero_6'))
+            print(suero_6)
+
+            progresion_enfermeda= int(''+request.POST.get('progresion_enfermeda'))
+            print(progresion_enfermeda)
+
+            modelo=request.POST.get('modelo')
+            print("Modelo seleccionado",modelo)
+
+            #Consumo de la lógica para predecir si se aprueba o no el crédito
+            print("leido todos los datos")
+            print("Creo la clase modeloSNN")
+
+            #RedNeuronal
+            resul=modeloSNN.modeloSNN.predecirNuevoCliente(modeloSNN.modeloSNN, edad=edad, sexo=sexo, indice_masa_corporal=indice_masa_corporal, precion_arterial=precion_arterial,
+            suero_1=suero_1, suero_2=suero_2, suero_3=suero_3, 
+            suero_4=suero_4, suero_5=suero_5, suero_6=suero_6, 
+            progresion_enfermedad=progresion_enfermeda)
+
+            #NBayes
+        except Exception as e:
+            print(e)
+            resul='Datos inválidos'
+           
+        return render(request, "resultadoNB.html",{"e":resul})
+
+
+
+
+
+@csrf_exempt
+@api_view(['GET','POST'])
+def predecirIOJson(request):
         print(request)
         print('***********************************************')
         print(request.body)
