@@ -110,7 +110,7 @@
         <hr>
 
         <div class="form-group col-md-4">
-            <label for="mod" class="font-weight-bold">Seleccione el Modelo</label>
+            <label for="mod" class="font-weight-bold">Modelo de predicción</label>
             <select class="form-control custom-select" id="modelo" name="modelo" required>
                 <option value="0">Red Neuronal</option>
                 <option value="1">Naive Bayes</option>
@@ -133,7 +133,7 @@
 <footer class="footer">
     <div class="container">
         <p>Contacto: <a href="mailto:contacto@hospitalsanpaul.com">PaulAstudillo@hospitalVitalis.com</a></p>
-        <p>Contacto: <a href="mailto:contacto@hospitalsanpaul.com">AndresAlvarado@hospitalsanpVitalis.com</a></p>
+        <p>Contacto: <a href="mailto:contacto@hospitalsanandres.com">AndresAlvarado@hospitalsanpVitalis.com</a></p>
         <p class="copyright" id="current-date"></p>
     </div>
 </footer>
@@ -180,35 +180,6 @@ function validateAge(input) {
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script src="script.js"></script>
-
-<!-- 
-<script>
-    function validateForm() {
-        var form = document.getElementById('myForm');
-        var modeloSelect = document.getElementById('modelo');
-        var selectedModel = modeloSelect.options[modeloSelect.selectedIndex].value;
-
-       //Validar el formulario según tus necesidades
-        // if (form.checkValidity()) {
-        //     // Formulario válido, realizar redirección según el modelo seleccionado
-        //     if (selectedModel === '0') {
-        //         // Redirigir a la página correspondiente para el modelo de Red Neuronal
-        //         window.location.href = '{% url "resultado" %}';;
-        //     } else if (selectedModel === '1') {
-        //         // Redirigir a la página correspondiente para el modelo de Naive Bayes
-        //         window.location.href = '{% url "resultadoNB" %}';
-        //     } else {
-        //         // Manejar otros casos si es necesario
-        //     }
-        //     return false;  // Evitar el envío del formulario
-        // } else {
-        //     // Formulario inválido, mostrar mensajes de validación
-        //     alert('Por favor, complete todos los campos correctamente.');
-        //     return false;
-        // }
-    }
-
-</script> -->
 
 </body>
 </html>
