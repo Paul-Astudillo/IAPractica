@@ -88,14 +88,11 @@ class modeloSNN():
             return resultado
     
 
-
-
-
-    print("llego aqui NB")
+    print("llego aqui NB Modelo PIPE ")
         #Función para integrar el preprocesador y la red neuronal en un Pipeline
-    def cargarModeloNB(self):
+    def cargarPipeNB(self):
         try:
-            print("cargando modelo")
+            print(" PIPE cargando modelo AHORA  NB NB NB NB ")
             directorio_actual = os.path.abspath(os.path.dirname(__file__))
             #Se carga el Pipeline de Preprocesamiento
             nombreArchivoPreprocesador= os.path.join(directorio_actual, 'Recursos','pipePreprocesadores.pickle')
@@ -106,10 +103,6 @@ class modeloSNN():
             cantidadPasos=len(pipe.steps)
             print("Cantidad de pasos: ", cantidadPasos)
             print(pipe.steps)
-            #Se carga la Red Neuronal
-            modeloOptimizado=self.cargar_naive_bayes(self , os.path.join(directorio_actual, 'Recursos', 'modeloNaiveBayesBase.pkl'))
-            #Se integra la Red Neuronal al final del Pipeline
-            pipe.steps.append(['modelNN',modeloOptimizado])
             cantidadPasos=len(pipe.steps)
             print("Cantidad de pasos: ",cantidadPasos)
             print(pipe.steps)
@@ -121,38 +114,84 @@ class modeloSNN():
             print(f"Error inesperado: {e}")
         return None
     
-    # def predecirNuevoPacienteNB(
-    #     self ,edad, sexo, indice_masa_corporal, precion_arterial,
-    #     suero_1, suero_2, suero_3, suero_4, suero_5, suero_6, progresion_enfermedad
-    #      ):
-    #     pipe_nb = modeloSNN.cargarModelo(self)
-    #     cnames = [
-    #         'EDAD', 'SEXO', 'INDICE_MASA_CORPORAL', 'PRECION_ARTERIAL', 'SUERO_1', 'SUERO_2',
-    #         'SUERO_3', 'SUERO_4', 'SUERO_5', 'SUERO_6', 'PROGRESION_ENFERMEDAD'
-    #     ]
-
-    #     # Preprocesamiento para Naive Bayes
-    #     Xnew_nb = [edad, sexo, indice_masa_corporal, precion_arterial, suero_1, suero_2,
-    #             suero_3, suero_4, suero_5, suero_6, progresion_enfermedad]
-        
-    #     Xnew_df_nb = pd.DataFrame(data=[Xnew_nb], columns=cnames)
-    #     Xnew_transformed_nb = pipe_nb.transform(Xnew_df_nb)
-
-    #     # Predicción con Naive Bayes
-    # # Predicción con Naive Bayes
-    #     modelo_nb = pipe_nb.named_steps['modelNN']
-    #     pred_proba_nb = modelo_nb.predict_proba(Xnew_transformed_nb)[:, 1].flatten()[0]  # Probabilidad de la clase positiva
-
-    #     print("Probabilidades de predicción:", pred_proba_nb)
-
-    #     # Ajustar el umbral de clasificación
-    #     umbral = 1  # Ajusta este valor según tus necesidades
-    #     if pred_proba_nb == umbral:
-    #         resultado = ' SI , Tiene Diabetes'
-    #     else:
-    #         resultado = 'NO , Tiene Diabetes'
-
-    #     return resultado
 
 
+
+
+    print("llego aqui NB Modelo ")
+        #Función para integrar el preprocesador y la red neuronal en un Pipeline
+    def cargarModeloNB(self):
+        try:
+            print(" PIPE cargando modelo AHORA  NB NB NB NB ")
+            directorio_actual = os.path.abspath(os.path.dirname(__file__))
+            #Se carga el modelo
+            modeloOptimizado=self.cargar_naive_bayes(self , os.path.join(directorio_actual, 'Recursos', 'modeloNaiveBayesBase.pkl'))
+            #Se integra la Red Neuronal al final del Pipeline
+            return modeloOptimizado
+        except FileNotFoundError as e:
+            print(f"Error archivo no encontrado: {e.filename}")
+        except Exception as e:
+            print(f"Error inesperado: {e}")
+        return None
     
+
+
+    #Esta es la función para calcular la certeza (confianza o probabilidad) asociada a la predicción de clase
+    def obtenerResultadosyCertezas(lista):
+        predicciones=lista
+        marcas=[]
+        certezas=[]
+        nuevomax=1
+        nuevomin=0
+        marca=-1
+        certeza=-1
+        for i in range(len(lista)):
+            prediccion=lista[i]
+            if (prediccion < 0.5):
+                marca = 'Sin diabetes'
+                maxa=0.5
+                mina=0
+                certeza=1-((prediccion-mina)/(maxa-mina)*(nuevomax-nuevomin)+nuevomin)
+                certeza=str(int((certeza)*100))+'%'
+            elif (prediccion >= 0.5):
+                marca = 'Con diabetes'
+                maxa=1
+                mina=0.5
+                certeza=(prediccion-mina)/(maxa-mina)*(nuevomax-nuevomin)+nuevomin
+                certeza=str(int((certeza)*100))+'%'
+            marcas.append(marca)
+            certezas.append(certeza)
+        return prediccion, marcas, certezas
+    
+
+
+    def predecirNuevoPacienteNB(
+        self, edad, sexo, indice_masa_corporal, precion_arterial,
+        suero_1, suero_2, suero_3, suero_4, suero_5, suero_6, progresion_enfermedad
+    ):
+        print("NB NB entro el Paciente")
+
+        cnames = [
+        'EDAD', 'SEXO', 'INDICE_MASA_CORPORAL', 'PRECION_ARTERIAL', 'SUERO_1', 'SUERO_2',
+        'SUERO_3', 'SUERO_4', 'SUERO_5', 'SUERO_6', 'PROGRESION_ENFERMEDAD'
+    ]
+
+
+        Xnew=[ edad, sexo, indice_masa_corporal, precion_arterial, suero_1, suero_2,
+            suero_3, suero_4, suero_5, suero_6, progresion_enfermedad]
+
+        pipeNB = modeloSNN.cargarPipeNB(self)
+
+        Xnew_Dataframe = pd.DataFrame(data=[Xnew],columns=cnames)
+        #pipe=cargarPipeline("pipePreprocesadores")
+        Xnew_Transformado=pipeNB.transform(Xnew_Dataframe)
+        modelo=modeloSNN.cargarModeloNB(self)
+
+        y_pred=modelo.predict(Xnew_Transformado)
+        predicciones, marcas, certezas= modeloSNN.obtenerResultadosyCertezas(y_pred)
+        dataframeFinal_pred=pd.DataFrame({'Resultado':marcas , 'Certeza': certezas})
+
+
+        resultado = dataframeFinal_pred.to_string(index=False)
+
+        return resultado

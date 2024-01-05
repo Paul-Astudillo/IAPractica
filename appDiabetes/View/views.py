@@ -119,8 +119,9 @@ class Clasificacion():
             print("leido todos los datos")
             print("Creo la clase modeloSNN")
 
+            print("NB   NB   NB   NB  NB  NB ")
             #RedNeuronal
-            resul=modeloSNN.modeloSNN.predecirNuevoCliente(modeloSNN.modeloSNN, edad=edad, sexo=sexo, indice_masa_corporal=indice_masa_corporal, precion_arterial=precion_arterial,
+            resul=modeloSNN.modeloSNN.predecirNuevoPacienteNB(modeloSNN.modeloSNN, edad=edad, sexo=sexo, indice_masa_corporal=indice_masa_corporal, precion_arterial=precion_arterial,
             suero_1=suero_1, suero_2=suero_2, suero_3=suero_3, 
             suero_4=suero_4, suero_5=suero_5, suero_6=suero_6, 
             progresion_enfermedad=progresion_enfermeda)

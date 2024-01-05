@@ -47,7 +47,7 @@
 
 
 
-    <form id="myForm" method="post" action="{% url 'resultado' %}">
+    <form id="myForm" method="post" >
         {% csrf_token %}
         <div class="form-row">
             <div class="form-group col-md-4">
@@ -173,6 +173,22 @@ function validateAge(input) {
     }
 }
 
+</script>
+
+<script>
+    document.getElementById('modelo').addEventListener('change', function() {
+        var modeloSeleccionado = this.value;
+        var form = document.getElementById('myForm');
+
+        console.log("Entro")
+        if (modeloSeleccionado === '0') {  // Red Neuronal
+            form.action = "{% url 'resultado' %}";
+        } else if (modeloSeleccionado === '1') {  // Naive Bayes
+            form.action = "{% url 'resultadoNB' %}";
+        }
+    });
+
+    // Resto de tu script...
 </script>
 
 
