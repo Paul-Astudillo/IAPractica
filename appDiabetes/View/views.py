@@ -22,35 +22,36 @@ class Clasificacion():
             edad = int(''+request.POST.get('edad'))
             print(edad)
 
-            indice_masa_corporal = int(''+request.POST.get('indice_masa_corporal'))
-            print(indice_masa_corporal)
-
-            precion_arterial = int(''+request.POST.get('precion_arterial'))
-            print(precion_arterial)
-
             sexo=request.POST.get('sexo')
             print(sexo)
 
-            suero_1= int(''+request.POST.get('suero_1'))
+            indice_masa_corporal = float(request.POST.get('indice_masa_corporal', 0.0))
+            print(indice_masa_corporal)
+
+            precion_arterial = float(request.POST.get('precion_arterial', 0.0))
+            print(precion_arterial)
+
+            suero_1 = float(request.POST.get('suero_1', 0.0))
             print(suero_1)
 
-            suero_2= int(''+request.POST.get('suero_2'))
+            suero_2 = float(request.POST.get('suero_2', 0.0))
             print(suero_2)
-     
-            suero_3= int(''+request.POST.get('suero_3'))
+
+            suero_3 = float(request.POST.get('suero_3', 0.0))
             print(suero_3)
 
-            suero_4= int(''+request.POST.get('suero_4'))
+            suero_4 = float(request.POST.get('suero_4', 0.0))
             print(suero_4)
 
-            suero_5= int(''+request.POST.get('suero_5'))
+            suero_5 = float(request.POST.get('suero_5', 0.0))
             print(suero_5)
 
-            suero_6= int(''+request.POST.get('suero_6'))
+            suero_6 = float(request.POST.get('suero_6', 0.0))
             print(suero_6)
 
-            progresion_enfermeda= int(''+request.POST.get('progresion_enfermeda'))
+            progresion_enfermeda = float(request.POST.get('progresion_enfermeda', 0.0))
             print(progresion_enfermeda)
+
 
             modelo=request.POST.get('modelo')
             print("Modelo seleccionado",modelo)
@@ -82,34 +83,34 @@ class Clasificacion():
             edad = int(''+request.POST.get('edad'))
             print(edad)
 
-            indice_masa_corporal = int(''+request.POST.get('indice_masa_corporal'))
-            print(indice_masa_corporal)
-
-            precion_arterial = int(''+request.POST.get('precion_arterial'))
-            print(precion_arterial)
-
             sexo=request.POST.get('sexo')
             print(sexo)
 
-            suero_1= int(''+request.POST.get('suero_1'))
+            indice_masa_corporal = float(request.POST.get('indice_masa_corporal', 0.0))
+            print(indice_masa_corporal)
+
+            precion_arterial = float(request.POST.get('precion_arterial', 0.0))
+            print(precion_arterial)
+
+            suero_1 = float(request.POST.get('suero_1', 0.0))
             print(suero_1)
 
-            suero_2= int(''+request.POST.get('suero_2'))
+            suero_2 = float(request.POST.get('suero_2', 0.0))
             print(suero_2)
-     
-            suero_3= int(''+request.POST.get('suero_3'))
+
+            suero_3 = float(request.POST.get('suero_3', 0.0))
             print(suero_3)
 
-            suero_4= int(''+request.POST.get('suero_4'))
+            suero_4 = float(request.POST.get('suero_4', 0.0))
             print(suero_4)
 
-            suero_5= int(''+request.POST.get('suero_5'))
+            suero_5 = float(request.POST.get('suero_5', 0.0))
             print(suero_5)
 
-            suero_6= int(''+request.POST.get('suero_6'))
+            suero_6 = float(request.POST.get('suero_6', 0.0))
             print(suero_6)
 
-            progresion_enfermeda= int(''+request.POST.get('progresion_enfermeda'))
+            progresion_enfermeda = float(request.POST.get('progresion_enfermeda', 0.0))
             print(progresion_enfermeda)
 
             modelo=request.POST.get('modelo')

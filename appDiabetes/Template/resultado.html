@@ -25,7 +25,7 @@
         .footer {
             background-color: #f8f9fa;
             padding: 20px 0;
-            position: absolute;
+            position: relative;
             bottom: 0;
             width: 100%;
         }
@@ -38,18 +38,33 @@
     </div>
 
     <!-- Agrega un contenedor para el resultado con estilos de Bootstrap -->
-    <div class="container">
-        <!-- Agrega un título con la clase de estilo personalizado -->
-        <div class="resultado-titulo">Resultado con la Red Neuronal</div>
-        <!-- Muestra el resultado de la red neuronal -->
-        Usted: {{e}}
+<!-- Agrega un contenedor para el resultado con estilos de Bootstrap y personalizados -->
+<!-- Agrega un contenedor para el resultado con estilos de Bootstrap y personalizados -->
+<div class="container-fluid mt-4">
+    <!-- Agrega un título con la clase de estilo personalizado -->
+    <div class="resultado-titulo mb-4">Resultado con la Red Neuronal</div>
+    <!-- Muestra el resultado de la red neuronal con estilos personalizados -->
+    <div class="alert alert-info" role="alert">
+        <h4 class="alert-heading">Resultado de la evaluación:</h4>
+        <hr>
+        {{e}}
     </div>
+
+    <div class="alert alert-danger" role="alert">
+        <h4 class="alert-heading">Atencion</h4>
+        <hr>
+        <div class="resultado-naive-bayes">
+            <p>Según nuestro estudio, el modelo de la red neuronal muestra ciertas limitaciones en la precisión para predecir la progresión de la diabetes en pacientes. En este contexto, te alentamos especialmente a explorar el modelo de Naive Bayes, el cual ha demostrado ser más efectivo en diversas situaciones y puede ofrecer resultados más confiables para la predicción.</p>
+        </div>
+    </div>
+
+</div> 
 
     <!-- Agrega el footer con estilos de Bootstrap -->
     <footer class="footer">
-        <div class="container">
+        <div class="container-fluid  mt-4">
             <p>Contacto: <a href="mailto:PaulAstudillo@hospitalVitalis.com">PaulAstudillo@hospitalVitalis.com</a></p>
-            <p>Contacto: <a href="mailto:AndresAlvarado@hospitalsanpVitalis.com">AndresAlvarado@hospitalsanpVitalis.com</a></p>
+            <p>Contacto: <a href="mailto:AndresAlvarado@hospitalsanpVitalis.com"> AndresAlvarado@hospitalsanpVitalis.com</a></p>
             <p class="copyright" id="current-date"></p>
         </div>
     </footer>

@@ -38,16 +38,21 @@
     </div>
 
     <!-- Agrega un contenedor para el resultado con estilos de Bootstrap -->
-    <div class="container">
+    <div class="container-fluid mt-4">
         <!-- Agrega un título con la clase de estilo personalizado -->
-        <div class="resultado-titulo">Resultado con la NAIVE BAYES</div>
-        <!-- Muestra el resultado de la red neuronal -->
-         {{e}}
+        <div class="resultado-titulo mb-4">Resultado con Modelo NAIVE BAYES</div>
+        <!-- Muestra el resultado de la red neuronal con estilos personalizados -->
+        <div class="alert alert-info" role="alert">
+            <h4 class="alert-heading">Resultado de la evaluación:</h4>
+            <hr>
+    
+            {{e}}
+        </div>
     </div>
 
     <!-- Agrega el footer con estilos de Bootstrap -->
     <footer class="footer">
-        <div class="container">
+        <div class="container-fluid">
             <p>Contacto: <a href="mailto:PaulAstudillo@hospitalVitalis.com">PaulAstudillo@hospitalVitalis.com</a></p>
             <p>Contacto: <a href="mailto:AndresAlvarado@hospitalsanpVitalis.com">AndresAlvarado@hospitalsanpVitalis.com</a></p>
             <p class="copyright" id="current-date"></p>

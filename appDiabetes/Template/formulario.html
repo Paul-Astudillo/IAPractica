@@ -36,13 +36,13 @@
 
 <!-- Header del Hospital -->
 <header class="hospital-header bg-primary text-white text-center py-3">
-    <div class="container">
+    <div class="container-fluid">
         <h1 class="hospital-title">Clínica Vitalis</h1>
  <img src="https://us.123rf.com/450wm/fayethequeen/fayethequeen2205/fayethequeen220500009/185502332-edificio-del-hospital-aislado-sobre-fondo-blanco-edificio-hospitalario-salud-y-concepto-m%C3%A9dico.jpg?ver=6" class="logo">
     </div>
 </header>
 
-<div class="container mt-5" >
+<div class="container-fluid mt-5" >
     <h2 class="mb-4">Formulario</h2>
 
 
@@ -70,7 +70,7 @@
         <div class="form-row">
             <div class="form-group col-md-4">
                 <label for="bloodPressure">Presión Arterial</label>
-                <input type="number" class="form-control" id="precion_arterial" name="precion_arterial" required>
+                <input type="number" class="form-control" id="precion_arterial" step=".01" name="precion_arterial" required>
             </div>
             <div class="form-group col-md-4">
                 <label for="serum1">Suero 1</label>
@@ -104,7 +104,7 @@
             </div>
             <div class="form-group col-md-4">
                 <label for="diseaseProgression">Progresión de Enfermedad</label>
-                <input type="number" class="form-control" id="progresion_enfermeda" name="progresion_enfermeda" required>
+                <input type="number" class="form-control" id="progresion_enfermeda" step=".01" name="progresion_enfermeda" required>
             </div>
         </div>
         <hr>
@@ -112,10 +112,13 @@
         <div class="form-group col-md-4">
             <label for="mod" class="font-weight-bold">Modelo de predicción</label>
             <select class="form-control custom-select" id="modelo" name="modelo" required>
+                <option value="-1">Selecione un Modelo</option>
                 <option value="0">Red Neuronal</option>
                 <option value="1">Naive Bayes</option>
             </select>
         </div>
+        <br>
+        <br>
         <br>
         
         <div class="text-center">
@@ -127,11 +130,9 @@
         
     </form>
 </div>
-<hr>
-
 
 <footer class="footer">
-    <div class="container">
+    <div class="container-fluid">
         <p>Contacto: <a href="mailto:contacto@hospitalsanpaul.com">PaulAstudillo@hospitalVitalis.com</a></p>
         <p>Contacto: <a href="mailto:contacto@hospitalsanandres.com">AndresAlvarado@hospitalsanpVitalis.com</a></p>
         <p class="copyright" id="current-date"></p>
@@ -185,6 +186,8 @@ function validateAge(input) {
             form.action = "{% url 'resultado' %}";
         } else if (modeloSeleccionado === '1') {  // Naive Bayes
             form.action = "{% url 'resultadoNB' %}";
+        }else{
+            input.setCustomValidity('Seleccione un Modelo');
         }
     });
 

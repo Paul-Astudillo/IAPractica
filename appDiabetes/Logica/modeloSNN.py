@@ -58,6 +58,38 @@ class modeloSNN():
         except Exception as e:
             print(f"Error inesperado: {e}")
         return None
+    
+
+        #Esta es la función para calcular la certeza (confianza o probabilidad) asociada a la predicción de clase
+    def obtenerResultadosyCertezas(lista):
+        predicciones=lista
+        marcas=[]
+        certezas=[]
+        nuevomax=1
+        nuevomin=0
+        marca=-1
+        certeza=-1
+        for i in range(len(lista)):
+            prediccion=lista[i]
+            if (prediccion < 0.5):
+                marca = 'Con base en los datos proporcionados, puedo confirmar que la progresión de la enfermedad en su caso ''NO'' indica signos adversos. Puede estar tranquilo/a, ya que no se observan elementos que sugieran una evolución desfavorable de la diabetes en su salud. La certeza de esta afirmación alcanza un porcentaje elevado, situándose en:'
+                maxa=0.5
+                mina=0
+                certeza=1-((prediccion-mina)/(maxa-mina)*(nuevomax-nuevomin)+nuevomin)
+                certeza=str(int((certeza)*100))+'%'
+            elif (prediccion >= 0.5):
+                marca = 'Con base en los datos proporcionados, puedo confirmar que la progresión de la enfermedad en su caso ''SI'' indica signos adversos. Se recomienda que consulte con un profesional de la salud para obtener una evaluación precisa de la situación y tomar las medidas necesarias. La certeza de esta observación alcanza un porcentaje significativo de:'
+                maxa=1
+                mina=0.5
+                certeza=(prediccion-mina)/(maxa-mina)*(nuevomax-nuevomin)+nuevomin
+                certeza=str(int((certeza)*100))+'%'
+            marcas.append(marca)
+            certezas.append(certeza)
+        return prediccion, marcas, certezas
+    
+
+
+
 
     def predecirNuevoCliente(self, edad, sexo, indice_masa_corporal, precion_arterial, suero_1, suero_2,
                                 suero_3, suero_4, suero_5, suero_6, progresion_enfermedad):
@@ -71,19 +103,22 @@ class modeloSNN():
             Xnew = [edad, sexo, indice_masa_corporal, precion_arterial, suero_1, suero_2,
                     suero_3, suero_4, suero_5, suero_6, progresion_enfermedad]
 
-            Xnew_Dataframe = pd.DataFrame(data=[Xnew], columns=cnames)
-            print(Xnew_Dataframe)
-            pred = pipe.predict(Xnew_Dataframe)
-            pred_proba = pred.flatten()[0]  # de 2D a 1D
+            # Xnew_Dataframe = pd.DataFrame(data=[Xnew], columns=cnames)
+            # print(Xnew_Dataframe)
+            # pred = pipe.predict(Xnew_Dataframe)
+            # pred_proba = pred.flatten()[0]  # de 2D a 1D
 
-            print("Probabilidades de predicción:", pred_proba)
 
-            # Ajustar el umbral de clasificación
-            umbral = 0.7
-            if pred_proba > umbral:
-                resultado = ' SI , Tiene Diabetes'
-            else:
-                resultado = 'NO , Tiene Diabetes'
+            Xnew_Dataframe = pd.DataFrame(data=[Xnew],columns=cnames)
+            y_pred=pipe.predict(Xnew_Dataframe)[0].tolist()
+            predicciones, marcas, certezas= modeloSNN.obtenerResultadosyCertezas(y_pred)
+            dataframeFinal_pred=pd.DataFrame({'Resultado':marcas , 'Certeza': certezas})
+
+
+            resultado = dataframeFinal_pred.to_string(index=False , header=False)
+
+            # print("Probabilidades de predicción:", pred_proba)
+
 
             return resultado
     
@@ -106,7 +141,7 @@ class modeloSNN():
             cantidadPasos=len(pipe.steps)
             print("Cantidad de pasos: ",cantidadPasos)
             print(pipe.steps)
-            print('Red Neuronal integrada al Pipeline')
+            print('PIPE PARA NB CARGADO CORRECTAMENTE')
             return pipe
         except FileNotFoundError as e:
             print(f"Error archivo no encontrado: {e.filename}")
@@ -136,33 +171,6 @@ class modeloSNN():
     
 
 
-    #Esta es la función para calcular la certeza (confianza o probabilidad) asociada a la predicción de clase
-    def obtenerResultadosyCertezas(lista):
-        predicciones=lista
-        marcas=[]
-        certezas=[]
-        nuevomax=1
-        nuevomin=0
-        marca=-1
-        certeza=-1
-        for i in range(len(lista)):
-            prediccion=lista[i]
-            if (prediccion < 0.5):
-                marca = 'Sin diabetes'
-                maxa=0.5
-                mina=0
-                certeza=1-((prediccion-mina)/(maxa-mina)*(nuevomax-nuevomin)+nuevomin)
-                certeza=str(int((certeza)*100))+'%'
-            elif (prediccion >= 0.5):
-                marca = 'Con diabetes'
-                maxa=1
-                mina=0.5
-                certeza=(prediccion-mina)/(maxa-mina)*(nuevomax-nuevomin)+nuevomin
-                certeza=str(int((certeza)*100))+'%'
-            marcas.append(marca)
-            certezas.append(certeza)
-        return prediccion, marcas, certezas
-    
 
 
     def predecirNuevoPacienteNB(
@@ -192,6 +200,6 @@ class modeloSNN():
         dataframeFinal_pred=pd.DataFrame({'Resultado':marcas , 'Certeza': certezas})
 
 
-        resultado = dataframeFinal_pred.to_string(index=False)
+        resultado = dataframeFinal_pred.to_string(index=False , header=False)
 
         return resultado
