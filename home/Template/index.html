@@ -51,12 +51,17 @@
             </div>
 
         <!-- Botón de redirección -->
-        <div class="row mt-4">
-            <div class="col-md-12 text-center">
-                <a href="http://127.0.0.1:8000/nuevasolicitud/" class="btn btn-primary">Nueva Solicitud</a>
+        <div class="col-md-6 text-center">
+            <div class="card">
+                <div class="card-body">
+                    <p>Nueva Solicitud</p>
+                    <button class="btn btn-primary" onclick="redirect()">Ir a Nueva Solicitud</button>
+                </div>
             </div>
         </div>
-    </div>
+
+
+
 
 
     <br>
@@ -74,6 +79,17 @@
         </div>
     </div>
     </footer>
+
+
+    <script>
+        // Tu código JavaScript personalizado aquí
+        function redirect() {
+            var url = "{% url 'nuevasolicitud' %}";
+            window.location.href = url;
+        }
+    </script>
+
+
 
     <!-- Bootstrap JS and Popper.js -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
