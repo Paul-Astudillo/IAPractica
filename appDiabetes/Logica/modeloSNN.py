@@ -39,13 +39,14 @@ class modeloSNN():
             nombreArchivoPreprocesador= os.path.join(directorio_actual, 'Recursos','pipePreprocesadores.pickle')
             #nombreArchivoPreprocesador='Recursos/pipePreprocesadores.pickle'
             print(nombreArchivoPreprocesador)
-            pipe=self.cargarPipeline(self, nombreArchivoPreprocesador)
+            pipe=self.cargarPipeline(nombreArchivoPreprocesador)
             print('Pipeline de Preprocesamiento Cargado')
             cantidadPasos=len(pipe.steps)
             print("Cantidad de pasos: ", cantidadPasos)
             print(pipe.steps)
             #Se carga la Red Neuronal
-            modeloOptimizado=self.cargarNN(self , os.path.join(directorio_actual, 'Recursos', 'modeloRedNeuronalBase.h5'))
+            modeloOptimizado=self.cargarNN(os.path.join(directorio_actual, 'Recursos', 'modeloRedNeuronalBase.h5'))
+            #modeloOptimizado=self.cargarNN(self,'Recursos/modeloRedNeuronalOptimizada.h5')
             #Se integra la Red Neuronal al final del Pipeline
             pipe.steps.append(['modelNN',modeloOptimizado])
             cantidadPasos=len(pipe.steps)
@@ -60,6 +61,24 @@ class modeloSNN():
         return None
     
 
+    def cargarModeloRN(self):
+        try:
+            print("cargando modelo")
+            #Se carga la Red Neuronal
+            directorio_actual = os.path.abspath(os.path.dirname(__file__))
+            modeloOptimizado=self.cargarNN(self , os.path.join(directorio_actual, 'Recursos', 'modeloRedNeuronalBase.h5'))
+            #Se integra la Red Neuronal al final del Pipeline
+            return modeloOptimizado
+        except FileNotFoundError as e:
+            print(f"Error archivo no encontrado: {e.filename}")
+        except Exception as e:
+            print(f"Error inesperado: {e}")
+        return None
+    
+    
+
+
+
         #Esta es la función para calcular la certeza (confianza o probabilidad) asociada a la predicción de clase
     def obtenerResultadosyCertezas(lista):
         predicciones=lista
@@ -71,6 +90,7 @@ class modeloSNN():
         certeza=-1
         for i in range(len(lista)):
             prediccion=lista[i]
+            print("----->",prediccion)
             if (prediccion < 0.5):
                 marca = 'Con base en los datos proporcionados, puedo confirmar que la progresión de la enfermedad en su caso ''NO'' indica signos adversos. Puede estar tranquilo/a, ya que no se observan elementos que sugieran una evolución desfavorable de la diabetes en su salud. La certeza de esta afirmación alcanza un porcentaje elevado, situándose en:'
                 maxa=0.5
@@ -91,36 +111,41 @@ class modeloSNN():
 
 
 
-    def predecirNuevoCliente(self, edad, sexo, indice_masa_corporal, precion_arterial, suero_1, suero_2,
-                                suero_3, suero_4, suero_5, suero_6, progresion_enfermedad):
-            print("EMPIEZA A PREDECIR EL MODELO")
-            pipe = modeloSNN.cargarModelo(self)
-            cnames = [
-                'EDAD', 'SEXO', 'INDICE_MASA_CORPORAL', 'PRECION_ARTERIAL', 'SUERO_1', 'SUERO_2',
-                'SUERO_3', 'SUERO_4', 'SUERO_5', 'SUERO_6', 'PROGRESION_ENFERMEDAD'
-            ]
+    #Esta es la función para calcular la certeza (confianza o probabilidad) asociada a la predicción de clase
+    def obtenerResultadosyCertezasRN(lista):
+        predicciones=lista
+        marcas=[]
+        certezas=[]
+        nuevomax=1
+        nuevomin=0
+        marca=-1
+        certeza=-1
+        for i in range(len(lista)):
+            prediccion=lista[i]
+            
+            print(prediccion)
+            if (prediccion < 0.57):
+                marca = 'Con base en los datos proporcionados, puedo confirmar que la progresión de la enfermedad en su caso ''NO'' indica signos adversos. Se recomienda que consulte con un profesional de la salud para obtener una evaluación precisa de la situación y tomar las medidas necesarias. La certeza de esta observación alcanza un porcentaje significativo de:'
+                maxa=0.54
+                mina=0
+                certeza=1-((prediccion-mina)/(maxa-mina)*(nuevomax-nuevomin)+nuevomin)
+                certeza=str(int((prediccion)*100))+'%'
+            elif (prediccion >= 0.57):
+                marca = 'Con base en los datos proporcionados, puedo confirmar que la progresión de la enfermedad en su caso ''SI'' indica signos adversos. Puede estar tranquilo/a, ya que no se observan elementos que sugieran una evolución desfavorable de la diabetes en su salud. La certeza de esta afirmación alcanza un porcentaje elevado, situándose en:'
+                maxa=1
+                mina=0.5
+                certeza=(prediccion-mina)/(maxa-mina)*(nuevomax-nuevomin)+nuevomin
+                certeza=str(int((certeza)*100))+'%'
+            marcas.append(marca)
+            certezas.append(certeza)
+        return prediccion, marcas, certezas
+ 
+    
 
-            Xnew = [edad, sexo, indice_masa_corporal, precion_arterial, suero_1, suero_2,
-                    suero_3, suero_4, suero_5, suero_6, progresion_enfermedad]
-
-            # Xnew_Dataframe = pd.DataFrame(data=[Xnew], columns=cnames)
-            # print(Xnew_Dataframe)
-            # pred = pipe.predict(Xnew_Dataframe)
-            # pred_proba = pred.flatten()[0]  # de 2D a 1D
 
 
-            Xnew_Dataframe = pd.DataFrame(data=[Xnew],columns=cnames)
-            y_pred=pipe.predict(Xnew_Dataframe)[0].tolist()
-            predicciones, marcas, certezas= modeloSNN.obtenerResultadosyCertezas(y_pred)
-            dataframeFinal_pred=pd.DataFrame({'Resultado':marcas , 'Certeza': certezas})
 
-
-            resultado = dataframeFinal_pred.to_string(index=False , header=False)
-
-            # print("Probabilidades de predicción:", pred_proba)
-
-
-            return resultado
+   
     
 
     print("llego aqui NB Modelo PIPE ")
@@ -203,3 +228,40 @@ class modeloSNN():
         resultado = dataframeFinal_pred.to_string(index=False , header=False)
 
         return resultado
+    
+
+
+    def predecirNuevoCliente(self, edad=59, sexo="1", indice_masa_corporal=32.1, precion_arterial=101.0, suero_1=157.0, suero_2=93.2,
+    suero_3=38.0, suero_4=4.00, suero_5=4.8598, suero_6=87.0, progresion_enfermedad=151.0):
+            print("EMPIEZA A PREDECIR EL MODELO CON RED NEURONAL")
+            print(edad)
+            print(sexo)
+            print(indice_masa_corporal)
+            print(precion_arterial)
+            print(suero_1)
+            print(progresion_enfermedad)    
+
+            pipe=modeloSNN.cargarPipeNB(self)
+            modelo_cargado=modeloSNN.cargarModeloRN(self)
+            pipe.steps.append(['modelNN',modelo_cargado])
+
+            cnames = [
+                'EDAD', 'SEXO', 'INDICE_MASA_CORPORAL', 'PRECION_ARTERIAL', 'SUERO_1', 'SUERO_2',
+                'SUERO_3', 'SUERO_4', 'SUERO_5', 'SUERO_6', 'PROGRESION_ENFERMEDAD'
+            ]
+
+            Xnew = [edad, sexo, indice_masa_corporal, precion_arterial, suero_1, suero_2,
+                    suero_3, suero_4, suero_5, suero_6, progresion_enfermedad]
+
+            Xnew_Dataframe = pd.DataFrame(data=[Xnew],columns=cnames)
+            y_pred=pipe.predict(Xnew_Dataframe)[0].tolist()
+            predicciones, marcas, certezas= modeloSNN.obtenerResultadosyCertezasRN(y_pred)
+            dataframeFinal_pred=pd.DataFrame({'Resultado':marcas , 'Certeza': certezas})
+
+            print("Resultados")
+            print(dataframeFinal_pred.head()) 
+            print(dataframeFinal_pred.to_string(index=False))
+
+            
+            resultado = dataframeFinal_pred.to_string(index=False , header=False)
+            return resultado
